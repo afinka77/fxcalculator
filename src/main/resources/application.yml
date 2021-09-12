@@ -1,0 +1,7 @@
+spring:
+  application.name: fxcalculator
+
+fxcalculator:
+  csv.file.name: data.csv
+  decimal.scale: 18
+  decimal.rounding.mode: HALF_UP

@@ -17,6 +17,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static com.myproject.fx.model.Currency.*;
 
 @WebMvcTest(value = FxController.class)
 class FxControllerTest {
@@ -36,7 +37,7 @@ class FxControllerTest {
                 .toCurrency(Currency.valueOf("USD"))
                 .rate(new BigDecimal("0.8"))
                 .build();
-        when(fxService.calculate(new BigDecimal(1),"EUR","USD")).thenReturn(calcResult);
+        when(fxService.calculate(new BigDecimal(1), EUR, USD)).thenReturn(calcResult);
 
         mvc.perform(get("/v1/fx/calculate?amount=1&fromCurrency=EUR&toCurrency=USD")
                 .accept(MediaType.APPLICATION_JSON))
