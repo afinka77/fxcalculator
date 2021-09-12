@@ -13,7 +13,6 @@ import java.time.Instant;
 @Data
 @Builder
 public class CalcResult {
-
     private BigDecimal fromAmount;
     private Currency fromCurrency;
     private BigDecimal toAmount;

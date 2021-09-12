@@ -1,5 +1,3 @@
-import org.gradle.kotlin.dsl.provider.inClassPathMode
-
 plugins {
     java
     id("org.springframework.boot") version "2.5.4"

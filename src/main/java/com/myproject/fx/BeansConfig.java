@@ -62,6 +62,5 @@ public class BeansConfig {
             log.error(e.getMessage());
             throw new ApplicationContextException("Rounding mode is invalid or not provided in application.yml", e);
         }
-
     }
 }
