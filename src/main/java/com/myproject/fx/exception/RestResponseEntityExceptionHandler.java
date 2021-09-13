@@ -1,5 +1,6 @@
 package com.myproject.fx.exception;
 
+import com.myproject.fx.model.Currency;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,20 +30,11 @@ public class RestResponseEntityExceptionHandler {
             Exception ex, WebRequest request) {
         List<String> errors = new ArrayList<>();
         switch (ex.getClass().getSimpleName()) {
-            case "MethodArgumentNotValidException":
-                errors.addAll(getErrorsFrom((MethodArgumentNotValidException) ex));
-                break;
-            case "MethodArgumentTypeMismatchException":
-                errors.addAll(getErrorsFrom((MethodArgumentTypeMismatchException) ex));
-                break;
-            case "MissingServletRequestParameterException":
-                errors.addAll(getErrorsFrom((MissingServletRequestParameterException) ex));
-                break;
-            case "ConstraintViolationException":
-                errors.addAll(getErrorsFrom((ConstraintViolationException) ex));
-                break;
-            default:
-                errors.add(ex.getLocalizedMessage());
+            case "MethodArgumentNotValidException" -> errors.addAll(getErrorsFrom((MethodArgumentNotValidException) ex));
+            case "MethodArgumentTypeMismatchException" -> errors.addAll(getErrorsFrom((MethodArgumentTypeMismatchException) ex));
+            case "MissingServletRequestParameterException" -> errors.addAll(getErrorsFrom((MissingServletRequestParameterException) ex));
+            case "ConstraintViolationException" -> errors.addAll(getErrorsFrom((ConstraintViolationException) ex));
+            default -> errors.add(ex.getLocalizedMessage());
         }
 
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage(), errors);
@@ -63,23 +55,27 @@ public class RestResponseEntityExceptionHandler {
     private List<String> getErrorsFrom(MethodArgumentTypeMismatchException ex) {
         List<String> errors = new ArrayList<>();
         if (BigDecimal.class.equals(ex.getRequiredType())) {
-            errors.add("Parameter '" + ex.getName() + "' has invalid value '" + ex.getValue() + "'. Value should be positive decimal.");
+            errors.add("Parameter '" + ex.getName() + "' has invalid value '" + ex.getValue() +
+                    "'. Value should be positive decimal.");
         } else {
-            errors.add("Parameter '" + ex.getName() + "' has invalid value '" + ex.getValue() + "'. Available values are: 'EUR','USD','GBP','BTC','ETH','FKE'");
+            errors.add("Parameter '" + ex.getName() + "' has invalid value '" + ex.getValue() +
+                    "'. Available values are: " + java.util.Arrays.asList(Currency.values()));
         }
         return errors;
     }
 
     private List<String> getErrorsFrom(MissingServletRequestParameterException ex) {
         List<String> errors = new ArrayList<>();
-        errors.add("Required request parameter '" + ex.getParameterName() + "' for method parameter type " + ex.getParameterType() + " is not present");
+        errors.add("Required request parameter '" + ex.getParameterName() +
+                "' for method parameter type " + ex.getParameterType() + " is not present");
         return errors;
     }
 
     private List<String> getErrorsFrom(ConstraintViolationException ex) {
         List<String> errors = new ArrayList<>();
         for (ConstraintViolation<?> cv : ex.getConstraintViolations()) {
-            errors.add("Request parameter '" + cv.getPropertyPath() + "' has invalid value '" + cv.getInvalidValue() + "', " + cv.getMessage());
+            errors.add("Request parameter '" + cv.getPropertyPath() +
+                    "' has invalid value '" + cv.getInvalidValue() + "', " + cv.getMessage());
         }
         return errors;
     }
