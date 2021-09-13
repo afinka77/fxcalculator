@@ -34,4 +34,4 @@ Example result:
 
 #### Swagger documentation 
 
-Swagger documentation is available via URL http://localhost:8080/swagger-ui/index.html
+Swagger documentation is available via URL http://localhost:8080/swagger-ui.html
